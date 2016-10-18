@@ -103,8 +103,7 @@ public final class InodeTree implements JournalCheckpointStreamable {
   /** Mount table manages the file system mount points. */
   private final MountTable mMountTable;
 
-  @SuppressWarnings("unchecked")
-  /** use UniqueFieldIndex directly for ID index rather than using IndexedSet */
+  /** Use UniqueFieldIndex directly for ID index rather than using IndexedSet. */
   private final FieldIndex<Inode<?>> mInodes = new UniqueFieldIndex<>(ID_INDEX);
   /** A set of inode ids representing pinned inode files. */
   private final Set<Long> mPinnedInodeFileIds = new ConcurrentHashSet<>(64, 0.90f, 64);
@@ -409,7 +408,7 @@ public final class InodeTree implements JournalCheckpointStreamable {
   /**
    * Appends components of the path from a given inode.
    *
-   * @param inode the inode to compute the path for
+   * @param inode the {@link Inode} to compute the path for
    * @param builder a {@link StringBuilder} that is updated with the path components
    * @throws FileDoesNotExistException if an inode in the path does not exist
    */
@@ -1027,7 +1026,7 @@ public final class InodeTree implements JournalCheckpointStreamable {
           // looking for has not been created in the meantime.
           lockList.unlockLast();
           lockList.lockWrite(current);
-          Inode recheckNext = ((InodeDirectory) current).getChild(pathComponents[i]);
+          Inode<?> recheckNext = ((InodeDirectory) current).getChild(pathComponents[i]);
           if (recheckNext != null) {
             // When releasing the lock and reacquiring the lock, another thread inserted the node we
             // are looking for. Use this existing next node.
